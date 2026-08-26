@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Settings — Threat Intelligence Platform</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="settings">
+<div class="shell">
+
+  <aside class="sidenav">
+    <div class="brand">
+      <div class="brand-mark"></div>
+      <div class="brand-text"><strong>Threatline</strong><span>Email Intel</span></div>
+    </div>
+    <nav class="nav-group">
+      <span class="nav-label">Scan</span>
+      <a class="nav-link" data-nav="upload" href="upload-email.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12M7 8l5-5 5 5M5 21h14"/></svg>
+        Upload Email
+      </a>
+      <a class="nav-link" data-nav="analyze" href="analyze-email.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        Analyze Email
+      </a>
+      <a class="nav-link" data-nav="report" href="threat-report.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12l2 2 4-4M7 3h10l3 3v15H4V3z"/></svg>
+        Threat Report
+      </a>
+      <span class="nav-label">Records</span>
+      <a class="nav-link" data-nav="history" href="history.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12a9 9 0 1 0 3-6.7M3 3v6h6"/><path d="M12 7v5l3 3"/></svg>
+        History
+      </a>
+      <span class="nav-label">Account</span>
+      <a class="nav-link" data-nav="settings" href="settings.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+        Settings
+      </a>
+    </nav>
+    <div class="sidenav-foot">
+      <div class="avatar">FB</div>
+      <div class="who"><strong>Frontend Dev B</strong><span>SOC Analyst view</span></div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div>
+        <h1>Settings</h1>
+        <div class="sub">Profile, security and notification preferences</div>
+      </div>
+    </header>
+
+    <main class="content">
+      <div class="tabs" data-tab-group="settings">
+        <div class="tab active" data-tab="profile">Profile</div>
+        <div class="tab" data-tab="security">Security</div>
+        <div class="tab" data-tab="api">API Key</div>
+        <div class="tab" data-tab="notifications">Notifications</div>
+        <div class="tab" data-tab="appearance">Appearance</div>
+      </div>
+
+      <!-- Profile -->
+      <div class="tab-panel active" data-group="settings" data-panel="profile">
+        <div class="card">
+          <div class="card-head"><h3>Profile</h3></div>
+          <div class="grid-2">
+            <div class="field"><label for="fullName">Full name</label><input type="text" id="fullName" value="Frontend Developer B"></div>
+            <div class="field"><label for="email">Email</label><input type="email" id="email" value="dev-b@threatline.io"></div>
+          </div>
+          <div class="field"><label for="role">Role</label>
+            <select id="role">
+              <option>SOC Analyst</option>
+              <option selected>Frontend Engineer</option>
+              <option>Backend Engineer</option>
+              <option>Administrator</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" onclick="saveSettings('Profile')">Save changes</button>
+        </div>
+      </div>
+
+      <!-- Security -->
+      <div class="tab-panel" data-group="settings" data-panel="security">
+        <div class="card">
+          <div class="card-head"><h3>Change password</h3></div>
+          <div class="grid-2">
+            <div class="field"><label for="curPass">Current password</label><input type="password" id="curPass" placeholder="••••••••"></div>
+            <div></div>
+            <div class="field"><label for="newPass">New password</label><input type="password" id="newPass" placeholder="••••••••"></div>
+            <div class="field"><label for="confirmPass">Confirm new password</label><input type="password" id="confirmPass" placeholder="••••••••"></div>
+          </div>
+          <button class="btn btn-primary" onclick="saveSettings('Password')">Update password</button>
+        </div>
+      </div>
+
+      <!-- API Key -->
+      <div class="tab-panel" data-group="settings" data-panel="api">
+        <div class="card">
+          <div class="card-head">
+            <h3>API key</h3>
+            <span class="hint">Used to call the platform's REST API</span>
+          </div>
+          <div class="ioc-row" style="justify-content:flex-start; gap:12px;">
+            <span id="apiKeyDisplay">tl_live_••••••••••••8f2c</span>
+            <button class="btn btn-ghost" style="padding:5px 10px;" onclick="toggleKey()" id="toggleKeyBtn">Show</button>
+            <button class="btn btn-ghost" style="padding:5px 10px;" onclick="copyKey()">Copy</button>
+          </div>
+          <p class="field desc" style="margin-top:10px;">Keep this key secret. Regenerating it will invalidate the previous key immediately.</p>
+          <button class="btn btn-danger" onclick="regenKey()">Regenerate key</button>
+        </div>
+      </div>
+
+      <!-- Notifications -->
+      <div class="tab-panel" data-group="settings" data-panel="notifications">
+        <div class="card">
+          <div class="card-head"><h3>Notifications</h3></div>
+          <div class="reason-row" style="align-items:center;">
+            <div style="flex:1;"><strong>Critical threats</strong><br><span>Email me when a scan returns Phishing or Malware</span></div>
+            <label class="switch"><input type="checkbox" checked><span class="track"></span></label>
+          </div>
+          <div class="reason-row" style="align-items:center;">
+            <div style="flex:1;"><strong>Weekly digest</strong><br><span>Summary of scanned emails and trends every Monday</span></div>
+            <label class="switch"><input type="checkbox" checked><span class="track"></span></label>
+          </div>
+          <div class="reason-row" style="align-items:center; border-bottom:none;">
+            <div style="flex:1;"><strong>Product updates</strong><br><span>New features and model improvements</span></div>
+            <label class="switch"><input type="checkbox"><span class="track"></span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Appearance -->
+      <div class="tab-panel" data-group="settings" data-panel="appearance">
+        <div class="card">
+          <div class="card-head"><h3>Appearance</h3></div>
+          <div class="reason-row" style="align-items:center; border-bottom:none;">
+            <div style="flex:1;"><strong>Console theme</strong><br><span>Threatline is designed dark-first for SOC environments</span></div>
+            <div class="chip-row">
+              <div class="chip active">Dark</div>
+              <div class="chip" onclick="notify('Light theme is not available yet — dark is optimized for extended monitoring.', 'signal')">Light</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="assets/app.js"></script>
+<script>
+  let keyVisible = false;
+  const fullKey = "tl_live_9f2a7c31b6e04d8facb2e7d1a4c68f2c";
+  const maskedKey = "tl_live_••••••••••••8f2c";
+
+  function toggleKey() {
+    keyVisible = !keyVisible;
+    document.getElementById("apiKeyDisplay").textContent = keyVisible ? fullKey : maskedKey;
+    document.getElementById("toggleKeyBtn").textContent = keyVisible ? "Hide" : "Show";
+  }
+
+  function copyKey() {
+    navigator.clipboard?.writeText(fullKey).then(() => notify("API key copied to clipboard.", "signal"));
+  }
+
+  function regenKey() {
+    notify("New API key generated. Update it anywhere the old key is in use.", "malware");
+  }
+
+  // Stands in for: PUT /settings, PUT /auth/profile, PUT /auth/change-password
+  function saveSettings(section) {
+    notify(`${section} saved.`, "signal");
+  }
+</script>
+</body>
+</html>

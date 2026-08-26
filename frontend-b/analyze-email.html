@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analyze Email — Threat Intelligence Platform</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="analyze">
+<div class="shell">
+
+  <aside class="sidenav">
+    <div class="brand">
+      <div class="brand-mark"></div>
+      <div class="brand-text"><strong>Threatline</strong><span>Email Intel</span></div>
+    </div>
+    <nav class="nav-group">
+      <span class="nav-label">Scan</span>
+      <a class="nav-link" data-nav="upload" href="upload-email.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12M7 8l5-5 5 5M5 21h14"/></svg>
+        Upload Email
+      </a>
+      <a class="nav-link" data-nav="analyze" href="analyze-email.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        Analyze Email
+      </a>
+      <a class="nav-link" data-nav="report" href="threat-report.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12l2 2 4-4M7 3h10l3 3v15H4V3z"/></svg>
+        Threat Report
+      </a>
+      <span class="nav-label">Records</span>
+      <a class="nav-link" data-nav="history" href="history.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12a9 9 0 1 0 3-6.7M3 3v6h6"/><path d="M12 7v5l3 3"/></svg>
+        History
+      </a>
+      <span class="nav-label">Account</span>
+      <a class="nav-link" data-nav="settings" href="settings.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+        Settings
+      </a>
+    </nav>
+    <div class="sidenav-foot">
+      <div class="avatar">FB</div>
+      <div class="who"><strong>Frontend Dev B</strong><span>SOC Analyst view</span></div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div>
+        <h1>Analyze Email</h1>
+        <div class="sub">Review parsed content before running threat detection</div>
+      </div>
+      <div style="display:flex; gap:10px;">
+        <button class="btn btn-ghost" onclick="window.location.href='upload-email.html'">Upload another</button>
+        <button class="btn btn-primary" id="runBtn">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg>
+          Run threat detection
+        </button>
+      </div>
+    </header>
+
+    <main class="content">
+      <!-- Email preview -->
+      <div class="card">
+        <div class="card-head">
+          <h3>Email preview</h3>
+          <span class="hint" id="previewMeta">—</span>
+        </div>
+        <div class="grid-2" style="margin-bottom:14px;">
+          <div>
+            <div class="field" style="margin-bottom:10px;"><label>Sender</label><div class="mono" id="pvSender">—</div></div>
+            <div class="field" style="margin-bottom:0;"><label>Receiver</label><div class="mono" id="pvReceiver">—</div></div>
+          </div>
+          <div>
+            <div class="field" style="margin-bottom:10px;"><label>Subject</label><div id="pvSubject">—</div></div>
+            <div class="field" style="margin-bottom:0;"><label>Date</label><div class="mono" id="pvDate">—</div></div>
+          </div>
+        </div>
+        <hr class="divider">
+        <div class="field" style="margin-bottom:0;">
+          <label>Body</label>
+          <div class="mono" id="pvBody" style="white-space:pre-wrap; font-size:12.5px; color:var(--text-mid); line-height:1.7; max-height:220px; overflow:auto; background:var(--void); border:1px solid var(--border-soft); border-radius:8px; padding:12px;">—</div>
+        </div>
+      </div>
+
+      <!-- Extracted data -->
+      <div class="card">
+        <div class="card-head">
+          <h3>Extracted data</h3>
+          <span class="hint">Parsed by the Email Parser module</span>
+        </div>
+
+        <div class="tabs" data-tab-group="extract">
+          <div class="tab active" data-tab="links">Links</div>
+          <div class="tab" data-tab="attachments">Attachments</div>
+          <div class="tab" data-tab="headers">Headers</div>
+          <div class="tab" data-tab="ips">IPs</div>
+        </div>
+
+        <div class="tab-panel active" data-group="extract" data-panel="links" id="panelLinks"></div>
+        <div class="tab-panel" data-group="extract" data-panel="attachments" id="panelAttachments"></div>
+        <div class="tab-panel" data-group="extract" data-panel="headers" id="panelHeaders"></div>
+        <div class="tab-panel" data-group="extract" data-panel="ips" id="panelIps"></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="assets/app.js"></script>
+<script>
+  const e = MOCK_REPORT; // stands in for GET /email/:id response
+
+  document.getElementById("previewMeta").textContent = `#${e.id}`;
+  document.getElementById("pvSender").textContent = e.sender;
+  document.getElementById("pvReceiver").textContent = e.receiver;
+  document.getElementById("pvSubject").textContent = e.subject;
+  document.getElementById("pvDate").textContent = fmtDate(e.date);
+  document.getElementById("pvBody").textContent = e.body;
+
+  document.getElementById("panelLinks").innerHTML = e.links.length
+    ? e.links.map(l => `<div class="ioc-row"><span>${l}</span><span class="tag">url</span></div>`).join("")
+    : `<div class="empty-state"><p>No links found in this message.</p></div>`;
+
+  document.getElementById("panelAttachments").innerHTML = e.attachments.length
+    ? e.attachments.map(a => `<div class="ioc-row"><span>${a}</span><span class="tag">file</span></div>`).join("")
+    : `<div class="empty-state"><h4>No attachments</h4><p>This message did not contain any files.</p></div>`;
+
+  document.getElementById("panelHeaders").innerHTML = e.headers.map(([k, v]) =>
+    `<div class="ioc-row"><span><strong style="color:var(--text-mid); font-family:var(--font-body); margin-right:8px;">${k}</strong>${v}</span></div>`
+  ).join("");
+
+  document.getElementById("panelIps").innerHTML = e.ips.map(ip =>
+    `<div class="ioc-row"><span>${ip}</span><span class="tag">sender ip</span></div>`
+  ).join("");
+
+  document.getElementById("runBtn").addEventListener("click", function () {
+    this.disabled = true;
+    this.innerHTML = "Analyzing…";
+    // Stands in for: POST /ai/predict + POST /ai/risk-score
+    setTimeout(() => { window.location.href = "threat-report.html"; }, 900);
+  });
+</script>
+</body>
+</html>
