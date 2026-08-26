@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Upload Email — Threat Intelligence Platform</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="upload">
+<div class="shell">
+
+  <!-- ================= SIDE NAV ================= -->
+  <aside class="sidenav">
+    <div class="brand">
+      <div class="brand-mark"></div>
+      <div class="brand-text"><strong>Threatline</strong><span>Email Intel</span></div>
+    </div>
+    <nav class="nav-group">
+      <span class="nav-label">Scan</span>
+      <a class="nav-link" data-nav="upload" href="upload-email.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12M7 8l5-5 5 5M5 21h14"/></svg>
+        Upload Email
+      </a>
+      <a class="nav-link" data-nav="analyze" href="analyze-email.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        Analyze Email
+      </a>
+      <a class="nav-link" data-nav="report" href="threat-report.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12l2 2 4-4M7 3h10l3 3v15H4V3z"/></svg>
+        Threat Report
+      </a>
+      <span class="nav-label">Records</span>
+      <a class="nav-link" data-nav="history" href="history.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12a9 9 0 1 0 3-6.7M3 3v6h6"/><path d="M12 7v5l3 3"/></svg>
+        History
+      </a>
+      <span class="nav-label">Account</span>
+      <a class="nav-link" data-nav="settings" href="settings.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+        Settings
+      </a>
+    </nav>
+    <div class="sidenav-foot">
+      <div class="avatar">FB</div>
+      <div class="who"><strong>Frontend Dev B</strong><span>SOC Analyst view</span></div>
+    </div>
+  </aside>
+
+  <!-- ================= MAIN ================= -->
+  <div class="main">
+    <header class="topbar">
+      <div>
+        <h1>Upload Email</h1>
+        <div class="sub">Submit a message for parsing and threat classification</div>
+      </div>
+      <button class="btn btn-ghost" onclick="window.location.href='history.html'">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12a9 9 0 1 0 3-6.7M3 3v6h6"/></svg>
+        View history
+      </button>
+    </header>
+
+    <main class="content">
+      <div class="grid-2" style="align-items:start;">
+
+        <!-- Upload card -->
+        <div class="card">
+          <div class="card-head">
+            <h3>Upload .eml file</h3>
+            <span class="hint">Max 25 MB</span>
+          </div>
+
+          <div class="dropzone" id="dropzone">
+            <div class="dz-icon">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12M7 8l5-5 5 5M5 21h14"/></svg>
+            </div>
+            <h4>Drag &amp; drop your .eml file here</h4>
+            <p>or click to browse — .eml, .msg supported</p>
+            <input type="file" accept=".eml,.msg" hidden>
+          </div>
+
+          <div id="fileChosen" style="display:none; margin-top:14px;">
+            <div class="ioc-row">
+              <span id="fileName">—</span>
+              <span class="tag" id="fileSize">—</span>
+            </div>
+          </div>
+
+          <div class="scan-track" id="scanTrack" style="display:none;"><div class="scan-bar"></div></div>
+          <p id="scanStatus" class="cell-sub" style="display:none; margin-top:8px;"></p>
+
+          <div style="display:flex; gap:10px; margin-top:16px;">
+            <button class="btn btn-primary" id="submitBtn" disabled style="flex:1; justify-content:center;">
+              Upload &amp; continue
+            </button>
+            <button class="btn btn-ghost" id="clearBtn" disabled>Clear</button>
+          </div>
+        </div>
+
+        <!-- Paste content card -->
+        <div class="card">
+          <div class="card-head">
+            <h3>Or paste raw email content</h3>
+            <span class="hint">Header + body</span>
+          </div>
+          <div class="field">
+            <label for="pasteArea">Raw .eml / message source</label>
+            <textarea id="pasteArea" placeholder="From: sender@example.com&#10;To: you@company.com&#10;Subject: ...&#10;&#10;Message body..."></textarea>
+          </div>
+          <button class="btn btn-primary" id="pasteSubmitBtn" style="width:100%; justify-content:center;">
+            Parse pasted content
+          </button>
+        </div>
+      </div>
+
+      <!-- Recent uploads -->
+      <div class="card" style="margin-top:16px;">
+        <div class="card-head">
+          <h3>Recently uploaded</h3>
+          <span class="hint">Last 5 submissions</span>
+        </div>
+        <table>
+          <thead><tr><th>Subject</th><th>Sender</th><th>Verdict</th><th>Uploaded</th><th></th></tr></thead>
+          <tbody id="recentBody"></tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="assets/app.js"></script>
+<script>
+  const dz = document.getElementById("dropzone");
+  const fileChosen = document.getElementById("fileChosen");
+  const fileName = document.getElementById("fileName");
+  const fileSize = document.getElementById("fileSize");
+  const submitBtn = document.getElementById("submitBtn");
+  const clearBtn = document.getElementById("clearBtn");
+  const scanTrack = document.getElementById("scanTrack");
+  const scanStatus = document.getElementById("scanStatus");
+
+  let chosenFile = null;
+
+  wireDropzone(dz, (file) => {
+    chosenFile = file;
+    fileName.textContent = file.name;
+    fileSize.textContent = `${(file.size / 1024).toFixed(1)} KB`;
+    fileChosen.style.display = "block";
+    submitBtn.disabled = false;
+    clearBtn.disabled = false;
+  });
+
+  clearBtn.addEventListener("click", () => {
+    chosenFile = null;
+    fileChosen.style.display = "none";
+    submitBtn.disabled = true;
+    clearBtn.disabled = true;
+  });
+
+  function simulateUpload(sourceLabel) {
+    scanTrack.style.display = "block";
+    scanStatus.style.display = "block";
+    scanStatus.textContent = "Parsing headers and extracting content…";
+    submitBtn.disabled = true;
+    // Stands in for: POST /email/upload  ->  POST /email/analyze
+    setTimeout(() => {
+      scanStatus.textContent = "Upload complete — opening Analyze Email…";
+      setTimeout(() => { window.location.href = "analyze-email.html"; }, 550);
+    }, 1300);
+  }
+
+  submitBtn.addEventListener("click", () => { if (chosenFile) simulateUpload(chosenFile.name); });
+  document.getElementById("pasteSubmitBtn").addEventListener("click", () => {
+    const val = document.getElementById("pasteArea").value.trim();
+    if (!val) { notify("Paste some email content first.", "malware"); return; }
+    simulateUpload("pasted content");
+  });
+
+  // Recent uploads table from mock history
+  const tbody = document.getElementById("recentBody");
+  tbody.innerHTML = MOCK_HISTORY.slice(0, 5).map(r => `
+    <tr onclick="window.location.href='threat-report.html'">
+      <td>${r.subject}</td>
+      <td class="mono cell-sub">${r.sender}</td>
+      <td>${badgeHtml(r.verdict)}</td>
+      <td class="cell-sub">${fmtDate(r.date)}</td>
+      <td style="text-align:right;">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" style="color:var(--text-low)"><path d="M9 18l6-6-6-6"/></svg>
+      </td>
+    </tr>`).join("");
+</script>
+</body>
+</html>
