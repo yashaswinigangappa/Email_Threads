@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Threat Analytics & Intelligence Metrics - Email Threat Intelligence Platform</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            cyber: {
+              bg: '#0B0F19',
+              dark: '#060913',
+              card: '#111827',
+              cyan: '#06B6D4',
+              blue: '#3B82F6',
+              danger: '#EF4444',
+              success: '#10B981',
+              warning: '#F59E0B'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <!-- Custom Cyber Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="min-h-screen bg-[#0B0F19] text-slate-100 bg-cyber-grid selection:bg-cyan-500 selection:text-black">
+
+  <!-- Sidebar Container -->
+  <div id="sidebar-container"></div>
+
+  <!-- Main Content Wrapper -->
+  <div class="lg:pl-64 flex flex-col min-h-screen">
+    <!-- Navbar Container -->
+    <div id="navbar-container"></div>
+
+    <!-- Main Body -->
+    <main class="flex-1 p-4 md:p-6 lg:p-8 space-y-8 max-w-[1600px] mx-auto w-full">
+      
+      <!-- Top Title & Export Tools -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 border-b border-slate-800/80">
+        <div>
+          <div class="flex items-center space-x-3">
+            <h1 class="text-2xl lg:text-3xl font-extrabold text-white tracking-tight">
+              Threat Intelligence Analytics
+            </h1>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-purple-500/10 text-purple-400 border border-purple-500/30 flex items-center">
+              DEEP TELEMETRY
+            </span>
+          </div>
+          <p class="text-xs md:text-sm text-slate-400 mt-1 font-mono">
+            Department Vulnerability Mapping, Attack Vectors, and Domain Reputation Analytics
+          </p>
+        </div>
+
+        <!-- Action & Export Buttons -->
+        <div class="flex items-center space-x-3">
+          <button 
+            onclick="exportAnalyticsData('csv')" 
+            class="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs font-mono text-cyan-400 flex items-center space-x-2 transition"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+            <span>Export CSV</span>
+          </button>
+          <button 
+            onclick="exportAnalyticsData('json')" 
+            class="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs font-mono text-emerald-400 flex items-center space-x-2 transition"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+            <span>Export JSON Feed</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Protocol Failure Rate KPI Cards -->
+      <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="glass-card rounded-2xl p-5 border border-rose-500/20 hover:border-rose-500/40 transition">
+          <div class="text-xs font-mono text-slate-400 font-semibold mb-1">SPF REJECTION RATE</div>
+          <div class="text-3xl font-extrabold text-rose-400 font-mono tracking-tight">84.5%</div>
+          <div class="text-xs text-slate-500 font-mono mt-1">Inbound threat headers failing SPF</div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-5 border border-amber-500/20 hover:border-amber-500/40 transition">
+          <div class="text-xs font-mono text-slate-400 font-semibold mb-1">DKIM SIGNATURE MISMATCH</div>
+          <div class="text-3xl font-extrabold text-amber-400 font-mono tracking-tight">79.2%</div>
+          <div class="text-xs text-slate-500 font-mono mt-1">Forged or absent DKIM keys</div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-5 border border-purple-500/20 hover:border-purple-500/40 transition">
+          <div class="text-xs font-mono text-slate-400 font-semibold mb-1">DMARC POLICY REJECTION</div>
+          <div class="text-3xl font-extrabold text-purple-400 font-mono tracking-tight">91.0%</div>
+          <div class="text-xs text-slate-500 font-mono mt-1">Domain alignment enforcement</div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-5 border border-cyan-500/20 hover:border-cyan-500/40 transition">
+          <div class="text-xs font-mono text-slate-400 font-semibold mb-1">AVG RESPONSE TIME</div>
+          <div class="text-3xl font-extrabold text-cyan-400 font-mono tracking-tight">142 ms</div>
+          <div class="text-xs text-slate-500 font-mono mt-1">AI sandbox parsing & verdict</div>
+        </div>
+      </section>
+
+      <!-- Charts Row 1: Targeted Departments & Threat Vectors Radar -->
+      <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Most Targeted Departments (Horizontal Bar) -->
+        <div class="glass-card rounded-2xl p-6 border border-slate-800/80 shadow-xl flex flex-col justify-between">
+          <div class="mb-4">
+            <h2 class="text-base font-bold text-white tracking-tight flex items-center justify-between">
+              <span>Targeted Corporate Departments</span>
+              <span class="text-xs font-mono text-rose-400 bg-rose-950/60 px-2 py-0.5 rounded border border-rose-800/50">VULNERABILITY MAP</span>
+            </h2>
+            <p class="text-xs text-slate-400 font-mono mt-0.5">Phishing vs Malware attack volume by organizational unit</p>
+          </div>
+          <div class="h-80 w-full">
+            <canvas id="departmentTargetChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Threat Vectors Radar Chart -->
+        <div class="glass-card rounded-2xl p-6 border border-slate-800/80 shadow-xl flex flex-col justify-between">
+          <div class="mb-4">
+            <h2 class="text-base font-bold text-white tracking-tight flex items-center justify-between">
+              <span>Attack Vector Distribution</span>
+              <span class="text-xs font-mono text-cyan-400 bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-800/50">RADAR FREQUENCY</span>
+            </h2>
+            <p class="text-xs text-slate-400 font-mono mt-0.5">Primary methodology observed in intercepted payloads</p>
+          </div>
+          <div class="h-80 w-full relative flex items-center justify-center">
+            <canvas id="threatVectorRadar"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- Charts Row 2: Inbound Scan Velocity vs Threats & Top Threat Domains -->
+      <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Velocity Trend Chart (2 Cols) -->
+        <div class="lg:col-span-2 glass-card rounded-2xl p-6 border border-slate-800/80 shadow-xl flex flex-col justify-between">
+          <div class="mb-4 flex items-center justify-between">
+            <div>
+              <h2 class="text-base font-bold text-white tracking-tight">Hourly Threat Velocity & Inbound Volume</h2>
+              <p class="text-xs text-slate-400 font-mono mt-0.5">Real-time correlation between scan load and blocked incidents</p>
+            </div>
+            <span class="text-xs font-mono text-slate-400">Timezone: UTC+05:30</span>
+          </div>
+          <div class="h-72 w-full">
+            <canvas id="velocityTrendChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Top Malicious Domains Leaderboard (1 Col) -->
+        <div class="glass-card rounded-2xl p-6 border border-slate-800/80 shadow-xl flex flex-col justify-between">
+          <div class="mb-4">
+            <h2 class="text-base font-bold text-white tracking-tight">Top Threat Origins</h2>
+            <p class="text-xs text-slate-400 font-mono mt-0.5">Persistent attacking domains & ASN hubs</p>
+          </div>
+          <div id="top-domains-list" class="space-y-2.5">
+            <!-- Rendered via js/analytics.js -->
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full border-t border-slate-800/80 py-4 px-6 text-center text-xs font-mono text-slate-500 mt-auto">
+      SIH26106 Email Threat Intelligence Platform • AI SOC Analytics Module
+    </footer>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/mock-data.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/analytics.js"></script>
+</body>
+</html>

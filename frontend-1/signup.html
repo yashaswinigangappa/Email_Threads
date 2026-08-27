@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SOC Operator Registration - Email Threat Intelligence Platform</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            cyber: {
+              bg: '#0B0F19',
+              dark: '#060913',
+              card: '#111827',
+              cyan: '#06B6D4',
+              blue: '#3B82F6',
+              danger: '#EF4444',
+              success: '#10B981',
+              warning: '#F59E0B'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Custom Cyber Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="min-h-screen bg-[#0B0F19] text-slate-100 flex flex-col justify-between bg-cyber-grid relative selection:bg-cyan-500 selection:text-black">
+
+  <!-- Ambient Glow Elements -->
+  <div class="fixed top-10 left-10 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+  <div class="fixed bottom-10 right-10 w-80 h-80 bg-purple-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+  <!-- Top Simple Header -->
+  <header class="w-full max-w-7xl mx-auto px-6 py-6 flex items-center justify-between z-10">
+    <a href="login.html" class="flex items-center space-x-3">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 via-blue-600 to-indigo-600 p-0.5 glow-cyan shadow-lg">
+        <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
+          <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+        </div>
+      </div>
+      <div>
+        <h1 class="text-base font-extrabold text-white tracking-wider font-mono">SENTINEL<span class="text-cyan-400">.AI</span></h1>
+        <p class="text-[10px] text-slate-400 font-mono tracking-tight">SIH26106 • THREAT INTEL PLATFORM</p>
+      </div>
+    </a>
+
+    <div class="flex items-center space-x-2 text-xs font-mono">
+      <span class="text-slate-400">Already registered?</span>
+      <a href="login.html" class="text-cyan-400 hover:text-cyan-300 font-bold underline">Login Here</a>
+    </div>
+  </header>
+
+  <!-- Signup Form Container -->
+  <main class="w-full max-w-lg mx-auto px-6 py-4 z-10">
+    <div class="glass-card rounded-2xl border border-slate-700/80 p-8 shadow-2xl relative overflow-hidden">
+      <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400"></div>
+
+      <div class="text-center mb-6">
+        <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 mb-3 shadow-inner">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
+        </div>
+        <h2 class="text-2xl font-black text-white tracking-tight">Provision SOC Analyst Account</h2>
+        <p class="text-xs text-slate-400 mt-1 font-mono">Join the enterprise threat mitigation and analysis tier</p>
+      </div>
+
+      <!-- Signup Form -->
+      <form onsubmit="AuthManager.handleSignup(event)" class="space-y-4">
+        <!-- Full Name -->
+        <div>
+          <label class="block text-xs font-mono font-semibold text-slate-300 mb-1" for="name">
+            OPERATOR FULL NAME
+          </label>
+          <input 
+            type="text" 
+            id="name" 
+            name="name" 
+            required 
+            placeholder="Agent Sarah Connor" 
+            class="w-full px-4 py-2 bg-slate-900/90 rounded-xl border border-slate-700/80 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 font-mono transition"
+          />
+        </div>
+
+        <!-- Email & Role -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-mono font-semibold text-slate-300 mb-1" for="email">
+              OFFICIAL EMAIL
+            </label>
+            <input 
+              type="email" 
+              id="email" 
+              name="email" 
+              required 
+              placeholder="s.connor@cybersec.io" 
+              class="w-full px-4 py-2 bg-slate-900/90 rounded-xl border border-slate-700/80 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 font-mono transition"
+            />
+          </div>
+          <div>
+            <label class="block text-xs font-mono font-semibold text-slate-300 mb-1" for="role">
+              SECURITY ROLE
+            </label>
+            <select 
+              id="role" 
+              name="role" 
+              class="w-full px-4 py-2 bg-slate-900/90 rounded-xl border border-slate-700/80 text-sm text-slate-100 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 font-mono transition"
+            >
+              <option value="Lead SOC Analyst">Lead SOC Analyst</option>
+              <option value="Threat Hunter">Threat Hunter</option>
+              <option value="Incident Responder">Incident Responder</option>
+              <option value="Security Admin">Security Admin</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Password & Confirm Password -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-mono font-semibold text-slate-300 mb-1" for="password">
+              PASSWORD
+            </label>
+            <input 
+              type="password" 
+              id="password" 
+              name="password" 
+              required 
+              placeholder="••••••••••••" 
+              class="w-full px-4 py-2 bg-slate-900/90 rounded-xl border border-slate-700/80 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 font-mono transition"
+            />
+          </div>
+          <div>
+            <label class="block text-xs font-mono font-semibold text-slate-300 mb-1" for="confirmPassword">
+              CONFIRM PASSWORD
+            </label>
+            <input 
+              type="password" 
+              id="confirmPassword" 
+              name="confirmPassword" 
+              required 
+              placeholder="••••••••••••" 
+              class="w-full px-4 py-2 bg-slate-900/90 rounded-xl border border-slate-700/80 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 font-mono transition"
+            />
+          </div>
+        </div>
+
+        <!-- Security Requirements Badge -->
+        <div class="p-3 bg-slate-900/60 rounded-xl border border-slate-800 text-[11px] font-mono text-slate-400 space-y-1">
+          <div class="text-slate-300 font-bold">Account Policy Validation:</div>
+          <div class="flex items-center text-emerald-400"><span>✓ Minimum 8 characters</span></div>
+          <div class="flex items-center text-emerald-400"><span>✓ Mandatory Hardware / TOTP 2FA Provisioning</span></div>
+        </div>
+
+        <button 
+          type="submit" 
+          class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold text-sm tracking-wide shadow-lg shadow-cyan-500/25 transition duration-200 flex items-center justify-center font-mono"
+        >
+          Complete Registration & Initialize Key →
+        </button>
+      </form>
+
+      <p class="mt-6 text-center text-xs text-slate-400">
+        Already have SOC credentials? 
+        <a href="login.html" class="text-cyan-400 hover:text-cyan-300 font-semibold font-mono underline ml-1">
+          Sign In
+        </a>
+      </p>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="w-full max-w-7xl mx-auto px-6 py-4 text-center text-xs text-slate-500 font-mono z-10">
+    <p>SIH26106 Email Threat Intelligence Platform • SOC Provisioning Service</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/mock-data.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/components.js"></script>
+</body>
+</html>
