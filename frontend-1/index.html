@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SOC Dashboard - AI Email Threat Intelligence Platform (SIH26106)</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            cyber: {
+              bg: '#0B0F19',
+              dark: '#060913',
+              card: '#111827',
+              cyan: '#06B6D4',
+              blue: '#3B82F6',
+              danger: '#EF4444',
+              success: '#10B981',
+              warning: '#F59E0B'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Chart.js for Cyber Visualizations -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <!-- Custom Cyber Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="min-h-screen bg-[#0B0F19] text-slate-100 bg-cyber-grid selection:bg-cyan-500 selection:text-black">
+
+  <!-- Sidebar Container -->
+  <div id="sidebar-container"></div>
+
+  <!-- Main Layout Wrapper (Shifted for sidebar on large screens) -->
+  <div class="lg:pl-64 flex flex-col min-h-screen">
+    <!-- Navbar Container -->
+    <div id="navbar-container"></div>
+
+    <!-- Main SOC Content Body -->
+    <main class="flex-1 p-4 md:p-6 lg:p-8 space-y-8 max-w-[1600px] mx-auto w-full">
+      
+      <!-- Top Title & Threat Level Banner -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 border-b border-slate-800/80">
+        <div>
+          <div class="flex items-center space-x-3">
+            <h1 class="text-2xl lg:text-3xl font-extrabold text-white tracking-tight">
+              Enterprise SOC Telemetry
+            </h1>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 flex items-center">
+              <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 mr-1.5 animate-pulse"></span> LIVE MONITOR
+            </span>
+          </div>
+          <p class="text-xs md:text-sm text-slate-400 mt-1 font-mono">
+            AI-Powered Email Threat Classification, Sender Reputation & URL Sandboxing
+          </p>
+        </div>
+
+        <div class="flex items-center space-x-3">
+          <button 
+            onclick="Toast.show('Initiating deep batch scan on incoming mail spool...', 'info')" 
+            class="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs font-mono text-slate-200 flex items-center space-x-2 transition"
+          >
+            <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+            <span>Sync Feeds</span>
+          </button>
+          <a 
+            href="javascript:void(0)" 
+            onclick="Toast.show('Analyze Email module will open in Frontend Developer B workspace.', 'info')" 
+            class="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white text-xs font-bold font-mono tracking-wide shadow-lg shadow-cyan-500/20 flex items-center space-x-2 transition"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+            <span>Upload Email (.eml)</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 1. Statistics Cards Grid (5 Essential Metrics) -->
+      <section>
+        <div id="stats-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+          <!-- Rendered via js/dashboard.js -->
+        </div>
+      </section>
+
+      <!-- 2. Interactive Charts Section (Trends & Threat Distribution) -->
+      <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Left: Threat Trends Multi-Line Chart (2 Cols) -->
+        <div class="lg:col-span-2 glass-card rounded-2xl p-6 border border-slate-800/80 shadow-xl flex flex-col justify-between">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+            <div>
+              <h2 class="text-base font-bold text-white tracking-tight flex items-center space-x-2">
+                <span>Threat Detection Trends</span>
+                <span class="text-xs font-mono text-cyan-400 bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-800/50">TIME-SERIES</span>
+              </h2>
+              <p class="text-xs text-slate-400 font-mono mt-0.5">Volumetric telemetry of Phishing, Malware, and Spam</p>
+            </div>
+            <!-- Timeframe Selector Tabs -->
+            <div class="flex items-center space-x-1.5 p-1 bg-slate-900/90 rounded-xl border border-slate-800 self-start sm:self-auto">
+              <button data-timeframe="7d" onclick="updateTrendsChart('7d')" class="timeframe-btn px-3 py-1 rounded-lg text-xs font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+                Last 7 Days
+              </button>
+              <button data-timeframe="30d" onclick="updateTrendsChart('30d')" class="timeframe-btn px-3 py-1 rounded-lg text-xs font-mono text-slate-400 hover:text-white bg-slate-900 border border-slate-800">
+                Last 30 Days
+              </button>
+              <button data-timeframe="6m" onclick="updateTrendsChart('6m')" class="timeframe-btn px-3 py-1 rounded-lg text-xs font-mono text-slate-400 hover:text-white bg-slate-900 border border-slate-800">
+                Last 6 Months
+              </button>
+            </div>
+          </div>
+          <div class="h-72 w-full">
+            <canvas id="threatTrendsChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Right: Threat Distribution Donut Chart (1 Col) -->
+        <div class="glass-card rounded-2xl p-6 border border-slate-800/80 shadow-xl flex flex-col justify-between">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h2 class="text-base font-bold text-white tracking-tight">Threat Distribution</h2>
+              <p class="text-xs text-slate-400 font-mono mt-0.5">Aggregate breakdown by classification</p>
+            </div>
+            <span class="w-3 h-3 rounded-full bg-cyan-400 radar-sweep"></span>
+          </div>
+          <div class="h-64 w-full relative flex items-center justify-center">
+            <canvas id="threatDistributionChart"></canvas>
+          </div>
+          <div class="mt-4 pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs font-mono text-slate-400">
+            <span>Critical Interceptions: <strong class="text-rose-400">1,430</strong></span>
+            <span>Clean Ratio: <strong class="text-emerald-400">75.8%</strong></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. Threat Intelligence Feed & AI Engine Telemetry Widget -->
+      <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Live Interception Stream (2 Cols) -->
+        <div class="lg:col-span-2 glass-card rounded-2xl p-6 border border-slate-800/80 shadow-xl">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h3 class="text-base font-bold text-white tracking-tight flex items-center space-x-2">
+                <span>Realtime Threat Interceptions</span>
+                <span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
+              </h3>
+              <p class="text-xs text-slate-400 font-mono mt-0.5">Live stream from incoming mail proxy & URL sandbox</p>
+            </div>
+            <a href="analytics.html" class="text-xs font-mono text-cyan-400 hover:underline">View Deep Analytics →</a>
+          </div>
+          <div id="threat-feed-container" class="space-y-3">
+            <!-- Rendered via js/dashboard.js -->
+          </div>
+        </div>
+
+        <!-- AI Engine Health & Security Heuristics (1 Col) -->
+        <div class="glass-card rounded-2xl p-6 border border-slate-800/80 shadow-xl flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-base font-bold text-white tracking-tight">AI Defense Status</h3>
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-500/20 text-emerald-400 font-bold">ACTIVE</span>
+            </div>
+            <div class="space-y-4 font-mono text-xs">
+              <div>
+                <div class="flex justify-between text-slate-300 mb-1">
+                  <span>FastAPI AI Model Confidence</span>
+                  <span class="text-cyan-400 font-bold">98.6%</span>
+                </div>
+                <div class="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
+                  <div class="h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full" style="width: 98.6%"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between text-slate-300 mb-1">
+                  <span>SPF / DKIM / DMARC Verification</span>
+                  <span class="text-emerald-400 font-bold">100% Active</span>
+                </div>
+                <div class="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
+                  <div class="h-full bg-emerald-500 rounded-full" style="width: 100%"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between text-slate-300 mb-1">
+                  <span>URL Sandboxing & Entropy Check</span>
+                  <span class="text-amber-400 font-bold">94.2%</span>
+                </div>
+                <div class="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
+                  <div class="h-full bg-amber-500 rounded-full" style="width: 94.2%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-3.5 mt-6 rounded-xl bg-slate-900/80 border border-slate-800 text-[11px] font-mono text-slate-400">
+            <div class="text-cyan-400 font-bold mb-1">Explainable AI Heuristics:</div>
+            Extracts NLP sentiment, urgent framing, lookalike domain typosquatting, and zero-day payload macros in under 150ms.
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. Recent Threats Table Section -->
+      <section class="glass-card rounded-2xl border border-slate-800/80 shadow-2xl overflow-hidden">
+        <div class="p-6 border-b border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h3 class="text-lg font-bold text-white tracking-tight flex items-center space-x-2">
+              <span>Recent Intercepted Threats</span>
+              <span class="text-xs font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300">Live Quarantine Log</span>
+            </h3>
+            <p class="text-xs text-slate-400 font-mono mt-0.5">Click any row or 'Investigate' to view full AI explainability report</p>
+          </div>
+          <div class="flex items-center space-x-2">
+            <button onclick="Toast.show('Filter table options: Phishing, Malware, Spam, Safe', 'info')" class="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700/60 text-xs font-mono text-slate-300 hover:text-white transition">
+              Filters & Search
+            </button>
+          </div>
+        </div>
+
+        <!-- Table View -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b border-slate-800 bg-slate-950/40 text-slate-400 font-mono text-xs uppercase tracking-wider">
+                <th class="py-3.5 px-4 font-semibold">Email Subject / Vector</th>
+                <th class="py-3.5 px-4 font-semibold">Sender Domain</th>
+                <th class="py-3.5 px-4 font-semibold">Risk Score</th>
+                <th class="py-3.5 px-4 font-semibold">AI Verdict</th>
+                <th class="py-3.5 px-4 font-semibold">Detected At</th>
+                <th class="py-3.5 px-4 font-semibold text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody id="recent-threats-body" class="divide-y divide-slate-800/60 font-mono text-sm">
+              <!-- Rendered via js/dashboard.js -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full border-t border-slate-800/80 py-4 px-6 text-center text-xs font-mono text-slate-500 mt-auto">
+      SIH26106 Email Threat Intelligence Platform • AI SOC Dashboard • Team Yashaswini, Anvitha, Vaishnavi, Manoj, Sri Ram
+    </footer>
+  </div>
+
+  <!-- Core Scripts -->
+  <script src="js/mock-data.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>
