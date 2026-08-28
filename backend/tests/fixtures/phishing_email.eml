@@ -1,0 +1,19 @@
+From: "PayPal Account Security" <service@paypal-security-alert.com>
+To: "Jane Doe" <analyst@cybersec.org>
+Subject: Urgent: Verify your PayPal account within 24 hours
+Date: Thu, 27 Aug 2026 10:14:00 +0000
+Message-ID: <202608271014.99281@paypal-security-alert.com>
+MIME-Version: 1.0
+Content-Type: text/html; charset=UTF-8
+Received-SPF: fail (domain of paypal-security-alert.com does not designate permitted sender hosts)
+Authentication-Results: mx.google.com; spf=fail (google.com: domain of service@paypal-security-alert.com does not designate 198.51.100.23 as permitted sender) smtp.mailfrom=service@paypal-security-alert.com; dkim=fail; dmarc=fail
+
+<html>
+  <body>
+    <h2>Security Alert: Suspicious Activity Detected</h2>
+    <p>Dear Customer,</p>
+    <p>We noticed an unauthorized login attempt on your account from IP 198.51.100.23. Your account will be temporarily locked within 24 hours unless you verify your identity.</p>
+    <p><a href="http://bit.ly/3x8f1-urgent-login">Click here to verify and restore your account immediately</a></p>
+    <p>Thank you,<br/>PayPal Security Support</p>
+  </body>
+</html>
