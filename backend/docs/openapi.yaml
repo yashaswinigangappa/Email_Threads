@@ -1,0 +1,511 @@
+openapi: 3.0.3
+info:
+  title: Email Threat Intelligence Platform API
+  description: Production REST API for SIH26106 Email Threat Intelligence Platform. Handles email ingestion (.eml and text), sender reputation analysis, URL threat scoring, attachment risk assessment, AI threat classification, PDF report generation, and security analytics.
+  version: 1.0.0
+  contact:
+    name: Backend Engineering Team
+    email: backend@emailthreatplatform.local
+servers:
+  - url: http://localhost:5000/api
+    description: Local Development Server
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+
+  schemas:
+    ApiResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        statusCode:
+          type: integer
+        message:
+          type: string
+        data:
+          type: object
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        role:
+          type: string
+        avatar:
+          type: string
+        apiKey:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+
+    SignupRequest:
+      type: object
+      required:
+        - name
+        - email
+        - password
+      properties:
+        name:
+          type: string
+          example: Jane Doe
+        email:
+          type: string
+          example: jane@cybersec.org
+        password:
+          type: string
+          example: Password123!
+
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          example: jane@cybersec.org
+        password:
+          type: string
+          example: Password123!
+
+    AIPredictRequest:
+      type: object
+      properties:
+        subject:
+          type: string
+        body:
+          type: string
+        sender:
+          type: string
+        headers:
+          type: object
+        urls:
+          type: array
+          items:
+            type: string
+        attachments:
+          type: array
+          items:
+            type: string
+
+    UrlAnalyzeRequest:
+      type: object
+      required:
+        - urls
+      properties:
+        urls:
+          type: array
+          items:
+            type: string
+          example:
+            - http://bit.ly/suspicious-link
+            - http://192.168.1.10/login.php
+
+    AttachmentAnalyzeRequest:
+      type: object
+      required:
+        - attachments
+      properties:
+        attachments:
+          type: array
+          items:
+            type: object
+            properties:
+              filename:
+                type: string
+                example: invoice.pdf.exe
+              size:
+                type: integer
+                example: 45000
+              mimeType:
+                type: string
+                example: application/x-msdownload
+
+paths:
+  /auth/signup:
+    post:
+      summary: Register a new user account
+      tags: [Authentication]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignupRequest'
+      responses:
+        201:
+          description: User registered successfully
+
+  /auth/login:
+    post:
+      summary: Login and obtain JWT token
+      tags: [Authentication]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        200:
+          description: Logged in successfully
+
+  /auth/logout:
+    post:
+      summary: Logout user
+      security:
+        - BearerAuth: []
+      tags: [Authentication]
+      responses:
+        200:
+          description: Logged out successfully
+
+  /auth/me:
+    get:
+      summary: Get logged in user profile
+      security:
+        - BearerAuth: []
+      tags: [Authentication]
+      responses:
+        200:
+          description: User profile retrieved
+
+  /dashboard/stats:
+    get:
+      summary: Get dashboard threat statistics
+      security:
+        - BearerAuth: []
+      tags: [Dashboard]
+      responses:
+        200:
+          description: Statistics retrieved
+
+  /dashboard/trends:
+    get:
+      summary: Get dashboard threat trends over time
+      security:
+        - BearerAuth: []
+      tags: [Dashboard]
+      parameters:
+        - in: query
+          name: range
+          schema:
+            type: string
+            enum: [7d, 30d, 6m]
+            default: 7d
+      responses:
+        200:
+          description: Trends retrieved
+
+  /dashboard/recent-threats:
+    get:
+      summary: Get recent threats table data
+      security:
+        - BearerAuth: []
+      tags: [Dashboard]
+      responses:
+        200:
+          description: Recent threats retrieved
+
+  /email/upload:
+    post:
+      summary: Ingest .eml file or raw email content
+      security:
+        - BearerAuth: []
+        - ApiKeyAuth: []
+      tags: [Email Processing]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                email_file:
+                  type: string
+                  format: binary
+          application/json:
+            schema:
+              type: object
+              properties:
+                rawEmail:
+                  type: string
+                subject:
+                  type: string
+                body:
+                  type: string
+                sender:
+                  type: string
+      responses:
+        200:
+          description: Email uploaded and parsed
+
+  /email/analyze:
+    post:
+      summary: Run full threat analysis pipeline on uploaded email
+      security:
+        - BearerAuth: []
+        - ApiKeyAuth: []
+      tags: [Email Processing]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                emailId:
+                  type: string
+      responses:
+        200:
+          description: Threat report generated
+
+  /email/{id}:
+    get:
+      summary: Get parsed email details by ID
+      security:
+        - BearerAuth: []
+      tags: [Email Processing]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Email retrieved
+
+  /ai/predict:
+    post:
+      summary: Predict email threat classification using AI model
+      security:
+        - BearerAuth: []
+        - ApiKeyAuth: []
+      tags: [AI Engine]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AIPredictRequest'
+      responses:
+        200:
+          description: AI classification and explainability output
+
+  /ai/risk-score:
+    post:
+      summary: Compute consolidated multi-vector risk score
+      tags: [AI Engine]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        200:
+          description: Risk score calculated
+
+  /sender-analysis/{email}:
+    get:
+      summary: Analyze sender domain, SPF, DKIM, DMARC, and reputation
+      security:
+        - BearerAuth: []
+      tags: [Sender Analysis]
+      parameters:
+        - in: path
+          name: email
+          required: true
+          schema:
+            type: string
+            example: sender@paypal-security.com
+      responses:
+        200:
+          description: Sender analysis complete
+
+  /url/analyze:
+    post:
+      summary: Inspect and classify URL threats
+      security:
+        - BearerAuth: []
+      tags: [URL Analysis]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UrlAnalyzeRequest'
+      responses:
+        200:
+          description: URL analysis complete
+
+  /attachment/analyze:
+    post:
+      summary: Inspect attachment filenames, hashes, and dangerous types
+      security:
+        - BearerAuth: []
+      tags: [Attachment Analysis]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AttachmentAnalyzeRequest'
+      responses:
+        200:
+          description: Attachment analysis complete
+
+  /report/{id}:
+    get:
+      summary: Retrieve threat intelligence report
+      security:
+        - BearerAuth: []
+      tags: [Reports]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Report retrieved
+
+  /report/download/{id}:
+    get:
+      summary: Download PDF threat intelligence report
+      security:
+        - BearerAuth: []
+      tags: [Reports]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: PDF binary file
+
+  /history:
+    get:
+      summary: Get paginated user email scan history
+      security:
+        - BearerAuth: []
+      tags: [History]
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 10
+        - in: query
+          name: search
+          schema:
+            type: string
+        - in: query
+          name: verdict
+          schema:
+            type: string
+            enum: [all, safe, spam, phishing, malware]
+      responses:
+        200:
+          description: History list retrieved
+    delete:
+      summary: Clear all scan history for current user
+      security:
+        - BearerAuth: []
+      tags: [History]
+      responses:
+        200:
+          description: History cleared
+
+  /history/{id}:
+    delete:
+      summary: Delete specific history record
+      security:
+        - BearerAuth: []
+      tags: [History]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: History record deleted
+
+  /threat-feed:
+    get:
+      summary: Get live threat feed
+      security:
+        - BearerAuth: []
+      tags: [Threat Feed]
+      responses:
+        200:
+          description: Threat feed retrieved
+
+  /analytics:
+    get:
+      summary: Get system analytics and threat distributions
+      security:
+        - BearerAuth: []
+      tags: [Analytics]
+      responses:
+        200:
+          description: Analytics retrieved
+
+  /settings:
+    get:
+      summary: Get current user settings
+      security:
+        - BearerAuth: []
+      tags: [Settings]
+      responses:
+        200:
+          description: Settings retrieved
+    put:
+      summary: Update user settings
+      security:
+        - BearerAuth: []
+      tags: [Settings]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        200:
+          description: Settings updated
+
+  /settings/regenerate-api-key:
+    post:
+      summary: Generate a new API key for the user
+      security:
+        - BearerAuth: []
+      tags: [Settings]
+      responses:
+        200:
+          description: New API key generated
