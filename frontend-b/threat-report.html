@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Threat Report — Threat Intelligence Platform</title>
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  @media print {
+    .sidenav, .topbar, .btn { display: none !important; }
+    body { background: #fff !important; color: #111 !important; }
+    .card { border-color: #ddd !important; background: #fff !important; }
+  }
+</style>
+</head>
+<body data-page="report">
+<div class="shell">
+
+  <aside class="sidenav">
+    <div class="brand">
+      <div class="brand-mark"></div>
+      <div class="brand-text"><strong>Threatline</strong><span>Email Intel</span></div>
+    </div>
+    <nav class="nav-group">
+      <span class="nav-label">Scan</span>
+      <a class="nav-link" data-nav="upload" href="upload-email.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12M7 8l5-5 5 5M5 21h14"/></svg>
+        Upload Email
+      </a>
+      <a class="nav-link" data-nav="analyze" href="analyze-email.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        Analyze Email
+      </a>
+      <a class="nav-link" data-nav="report" href="threat-report.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12l2 2 4-4M7 3h10l3 3v15H4V3z"/></svg>
+        Threat Report
+      </a>
+      <span class="nav-label">Records</span>
+      <a class="nav-link" data-nav="history" href="history.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12a9 9 0 1 0 3-6.7M3 3v6h6"/><path d="M12 7v5l3 3"/></svg>
+        History
+      </a>
+      <span class="nav-label">Account</span>
+      <a class="nav-link" data-nav="settings" href="settings.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+        Settings
+      </a>
+    </nav>
+    <div class="sidenav-foot">
+      <div class="avatar">FB</div>
+      <div class="who"><strong>Frontend Dev B</strong><span>SOC Analyst view</span></div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div>
+        <h1>Threat Report</h1>
+        <div class="sub mono" id="reportId">—</div>
+      </div>
+      <div style="display:flex; gap:10px;">
+        <button class="btn btn-ghost" onclick="window.location.href='history.html'">Back to history</button>
+        <button class="btn btn-primary" id="pdfBtn">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>
+          Download PDF
+        </button>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <!-- Summary + gauge -->
+      <div class="card">
+        <div class="card-head">
+          <h3>Threat summary</h3>
+          <span id="verdictBadge"></span>
+        </div>
+        <div class="gauge-wrap">
+          <div id="gaugeHost"></div>
+          <div style="flex:1;">
+            <div id="subjectLine" style="font-size:16px; font-weight:600; margin-bottom:6px;">—</div>
+            <div class="cell-sub mono" id="senderLine" style="margin-bottom:14px;">—</div>
+            <div class="grid-3">
+              <div>
+                <div class="nav-label" style="padding:0;">Verdict</div>
+                <div id="verdictText" style="font-family:var(--font-mono); font-weight:600; margin-top:4px;">—</div>
+              </div>
+              <div>
+                <div class="nav-label" style="padding:0;">Confidence</div>
+                <div class="mono" id="confidenceText" style="font-weight:600; margin-top:4px;">—</div>
+              </div>
+              <div>
+                <div class="nav-label" style="padding:0;">Scanned</div>
+                <div class="mono" id="scannedText" style="margin-top:4px;">—</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2" style="align-items:start;">
+        <!-- Explainable AI -->
+        <div class="card">
+          <div class="card-head">
+            <h3>Why this verdict</h3>
+            <span class="hint">Explainable AI</span>
+          </div>
+          <div id="reasonsList"></div>
+        </div>
+
+        <!-- Indicators of Compromise -->
+        <div class="card">
+          <div class="card-head">
+            <h3>Indicators of compromise</h3>
+            <span class="hint">IOCs</span>
+          </div>
+          <div id="iocList"></div>
+        </div>
+      </div>
+
+      <!-- Recommendations -->
+      <div class="card">
+        <div class="card-head"><h3>Recommendations</h3></div>
+        <div id="recList"></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="assets/app.js"></script>
+<script>
+  const r = MOCK_REPORT; // stands in for GET /report/:id
+  const v = verdictMeta(r.verdict);
+
+  document.getElementById("reportId").textContent = `#${r.id}`;
+  document.getElementById("verdictBadge").innerHTML = badgeHtml(r.verdict);
+  document.getElementById("subjectLine").textContent = r.subject;
+  document.getElementById("senderLine").textContent = `${r.sender} → ${r.receiver}`;
+  document.getElementById("verdictText").innerHTML = `<span style="color:${v.color}">${v.label}</span>`;
+  document.getElementById("confidenceText").textContent = `${r.confidence}%`;
+  document.getElementById("scannedText").textContent = fmtDate(r.date);
+
+  renderGauge(document.getElementById("gaugeHost"), r.risk);
+
+  document.getElementById("reasonsList").innerHTML = r.reasons.map(reason => {
+    const rv = verdictMeta(reason.severity);
+    return `<div class="reason-row">
+      <span class="reason-dot" style="background:${rv.color}"></span>
+      <div><strong>${reason.title}</strong><span>${reason.detail}</span></div>
+    </div>`;
+  }).join("");
+
+  document.getElementById("iocList").innerHTML = r.iocs.length
+    ? r.iocs.map(i => `<div class="ioc-row"><span>${i.value}</span><span class="tag">${i.type}</span></div>`).join("")
+    : `<div class="empty-state"><p>No indicators of compromise found.</p></div>`;
+
+  document.getElementById("recList").innerHTML = r.recommendations.map(rec => `
+    <div class="rec-row">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+      <span>${rec}</span>
+    </div>`).join("");
+
+  document.getElementById("pdfBtn").addEventListener("click", () => downloadReportPdf(r.id));
+</script>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>History — Threat Intelligence Platform</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="history">
+<div class="shell">
+
+  <aside class="sidenav">
+    <div class="brand">
+      <div class="brand-mark"></div>
+      <div class="brand-text"><strong>Threatline</strong><span>Email Intel</span></div>
+    </div>
+    <nav class="nav-group">
+      <span class="nav-label">Scan</span>
+      <a class="nav-link" data-nav="upload" href="upload-email.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12M7 8l5-5 5 5M5 21h14"/></svg>
+        Upload Email
+      </a>
+      <a class="nav-link" data-nav="analyze" href="analyze-email.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        Analyze Email
+      </a>
+      <a class="nav-link" data-nav="report" href="threat-report.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12l2 2 4-4M7 3h10l3 3v15H4V3z"/></svg>
+        Threat Report
+      </a>
+      <span class="nav-label">Records</span>
+      <a class="nav-link" data-nav="history" href="history.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12a9 9 0 1 0 3-6.7M3 3v6h6"/><path d="M12 7v5l3 3"/></svg>
+        History
+      </a>
+      <span class="nav-label">Account</span>
+      <a class="nav-link" data-nav="settings" href="settings.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+        Settings
+      </a>
+    </nav>
+    <div class="sidenav-foot">
+      <div class="avatar">FB</div>
+      <div class="who"><strong>Frontend Dev B</strong><span>SOC Analyst view</span></div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div>
+        <h1>History</h1>
+        <div class="sub">Every message this platform has scanned</div>
+      </div>
+    </header>
+
+    <main class="content">
+      <div class="card">
+        <div style="display:flex; gap:12px; align-items:center; margin-bottom:16px; flex-wrap:wrap;">
+          <input type="search" id="searchInput" placeholder="Search by subject or sender…" style="max-width:320px;">
+          <div class="chip-row" id="filterChips">
+            <div class="chip active" data-filter="all">All</div>
+            <div class="chip" data-filter="safe">Safe</div>
+            <div class="chip" data-filter="spam">Spam</div>
+            <div class="chip" data-filter="phishing">Phishing</div>
+            <div class="chip" data-filter="malware">Malware</div>
+          </div>
+          <span class="hint" id="resultCount" style="margin-left:auto; color:var(--text-low); font-size:12px;"></span>
+        </div>
+
+        <table>
+          <thead>
+            <tr><th>Subject</th><th>Sender</th><th>Verdict</th><th>Risk</th><th>Date</th><th></th></tr>
+          </thead>
+          <tbody id="historyBody"></tbody>
+        </table>
+        <div class="empty-state" id="emptyState" style="display:none;">
+          <h4>No matching scans</h4>
+          <p>Try a different search term or filter.</p>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="assets/app.js"></script>
+<script>
+  let records = [...MOCK_HISTORY]; // stands in for GET /history
+  let activeFilter = "all";
+  let query = "";
+
+  function draw() {
+    const filtered = records.filter(r => {
+      const matchesFilter = activeFilter === "all" || r.verdict === activeFilter;
+      const matchesQuery = !query ||
+        r.subject.toLowerCase().includes(query) ||
+        r.sender.toLowerCase().includes(query);
+      return matchesFilter && matchesQuery;
+    });
+
+    document.getElementById("resultCount").textContent = `${filtered.length} of ${records.length} scans`;
+    const body = document.getElementById("historyBody");
+    const empty = document.getElementById("emptyState");
+
+    if (!filtered.length) {
+      body.innerHTML = "";
+      empty.style.display = "block";
+      return;
+    }
+    empty.style.display = "none";
+
+    body.innerHTML = filtered.map(r => `
+      <tr onclick="window.location.href='threat-report.html'">
+        <td>${r.subject}<div class="cell-sub">${r.id}</div></td>
+        <td class="mono cell-sub">${r.sender}</td>
+        <td>${badgeHtml(r.verdict)}</td>
+        <td>
+          <span class="mono" style="color:${riskColor(r.risk)}">${r.risk}</span>
+          <span class="progress-inline"><i style="width:${r.risk}%; background:${riskColor(r.risk)}"></i></span>
+        </td>
+        <td class="cell-sub">${fmtDate(r.date)}</td>
+        <td style="text-align:right;">
+          <button class="btn btn-ghost" style="padding:5px 9px;" onclick="event.stopPropagation(); removeRecord('${r.id}')" title="Delete">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2m2 0-1 14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1L5 6"/></svg>
+          </button>
+        </td>
+      </tr>`).join("");
+  }
+
+  // Stands in for: DELETE /history/:id
+  function removeRecord(id) {
+    records = records.filter(r => r.id !== id);
+    notify(`Removed ${id} from history.`, "malware");
+    draw();
+  }
+
+  document.getElementById("searchInput").addEventListener("input", (e) => {
+    query = e.target.value.trim().toLowerCase();
+    draw();
+  });
+
+  document.getElementById("filterChips").addEventListener("click", (e) => {
+    const chip = e.target.closest(".chip");
+    if (!chip) return;
+    document.querySelectorAll("#filterChips .chip").forEach(c => c.classList.remove("active"));
+    chip.classList.add("active");
+    activeFilter = chip.dataset.filter;
+    draw();
+  });
+
+  draw();
+</script>
+</body>
+</html>
